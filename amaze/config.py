@@ -1,4 +1,4 @@
-"""Wczytywanie pliku konfiguracyjnego A-Maze-ing."""
+"""Reading of config file of A-Maze-ing."""
 
 from dataclasses import dataclass
 
@@ -20,12 +20,12 @@ FALSE_WORDS = {"false", "0", "no"}
 
 
 class ConfigError(Exception):
-    """Blad w pliku konfiguracyjnym."""
+    """Error in config file"""
 
 
 @dataclass(frozen=True)
 class Config:
-    """Komplet parametrow generatora."""
+    """Parameter for Config"""
 
     width: int
     height: int
@@ -37,7 +37,7 @@ class Config:
 
 
 def read_pairs(path: str) -> dict[str, str]:
-    """Czyta plik KEY=VALUE i zwraca slownik kluczy."""
+    """Read KEY=VALUE and return dict of keys"""
     try:
         with open(path, "r", encoding="utf-8") as handle:
             lines = handle.readlines()
@@ -62,7 +62,7 @@ def read_pairs(path: str) -> dict[str, str]:
 
 
 def check_keys(pairs: dict[str, str]) -> None:
-    """Pilnuje kompletu kluczy obowiazkowych i odrzuca nieznane."""
+    """Check mandatory keys and look for optional"""
     missing = [key for key in MANDATORY_KEYS if key not in pairs]
     if missing:
         raise ConfigError(f"brak kluczy: {', '.join(missing)}")
@@ -73,7 +73,7 @@ def check_keys(pairs: dict[str, str]) -> None:
 
 
 def as_int(pairs: dict[str, str], key: str) -> int:
-    """Zamienia wartosc klucza na int."""
+    """change to int"""
     raw = pairs[key]
     try:
         return int(raw)
@@ -82,7 +82,7 @@ def as_int(pairs: dict[str, str], key: str) -> int:
 
 
 def as_coords(pairs: dict[str, str], key: str) -> tuple[int, int]:
-    """Zamienia wartosc klucza w formacie x,y na pare int-ow."""
+    """Change from x,y to pair of int"""
     raw = pairs[key]
     parts = raw.split(",")
     if len(parts) != 2:
@@ -94,7 +94,7 @@ def as_coords(pairs: dict[str, str], key: str) -> tuple[int, int]:
 
 
 def as_bool(pairs: dict[str, str], key: str) -> bool:
-    """Zamienia wartosc klucza na bool."""
+    """change key value to bool"""
     raw = pairs[key]
     word = raw.lower()
     if word in TRUE_WORDS:
@@ -105,7 +105,7 @@ def as_bool(pairs: dict[str, str], key: str) -> bool:
 
 
 def validate(config: Config) -> None:
-    """Sprawdza, czy z tych parametrow da sie zbudowac labirynt."""
+    """Check if making of maze is possibol"""
     for name, size in (("WIDTH", config.width), ("HEIGHT", config.height)):
         if not MIN_SIDE <= size <= MAX_SIDE:
             raise ConfigError(
@@ -122,17 +122,17 @@ def validate(config: Config) -> None:
 def check_inside(
     name: str, point: tuple[int, int], config: Config
 ) -> None:
-    """Sprawdza, czy punkt lezy w granicach siatki."""
+    """Check if point is in maze"""
     x, y = point
     if not 0 <= x < config.width or not 0 <= y < config.height:
         raise ConfigError(
-            f"{name}={x},{y} jest poza labiryntem "
+            f"{name}={x},{y} is out of maze"
             f"{config.width}x{config.height}"
         )
 
 
 def load_config(path: str) -> Config:
-    """Czyta plik konfiguracyjny i zwraca zwalidowany Config."""
+    """Check config and return validate one"""
     pairs = read_pairs(path)
     check_keys(pairs)
     config = Config(

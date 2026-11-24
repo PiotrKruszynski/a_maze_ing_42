@@ -1,4 +1,4 @@
-# A-Maze-ing - domyslna konfiguracja
+# A-Maze-ing - basic configuration
 WIDTH=20
 HEIGHT=15
 ENTRY=0,0

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A-Maze-ing — generator labiryntow."""
+"""A-Maze-ing — maze generator """
 
 import sys
 
@@ -7,7 +7,7 @@ from amaze.config import Config, ConfigError, load_config
 
 
 def debug_print(config: Config) -> None:
-    """Tymczasowy podglad configu - leci, gdy ruszy generator."""
+    """temporary Config print"""
     print(f"rozmiar : {config.width}x{config.height}")
     print(f"entry   : {config.entry}")
     print(f"exit    : {config.exit}")
@@ -17,7 +17,7 @@ def debug_print(config: Config) -> None:
 
 
 def main(argv: list[str]) -> int:
-    """Zwraca kod wyjscia: 0 gdy OK, 1 gdy blad uzycia."""
+    """Return 0 if OK and 1 if not"""
     if len(argv) != 2:
         print("usage: python3 a_maze_ing.py config.txt", file=sys.stderr)
         return 1
