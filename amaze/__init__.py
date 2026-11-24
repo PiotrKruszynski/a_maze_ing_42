@@ -1,0 +1,1 @@
+"""Warstwa aplikacji A-Maze-ing: config, zapis pliku, render, UI."""
